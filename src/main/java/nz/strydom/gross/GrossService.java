@@ -1,7 +1,8 @@
 package nz.strydom.gross;
 
+import nz.strydom.gross.interfaces.IGrossService;
 
-public class GrossService {
+public class GrossService implements IGrossService {
 
 	/*
 	 * TODO
