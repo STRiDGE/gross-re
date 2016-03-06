@@ -1,5 +1,9 @@
 package nz.strydom.gross.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * A single item to display on the shopping list.
  * 
@@ -9,8 +13,10 @@ package nz.strydom.gross.domain;
  * Should NOT contain: 
  * Price, Quantity
  */
+@Entity
 public class Product {
 
+	@Id
 	private String id;
 	public String getId() { return this.id; }
 	public void setId(String id) { this.id = id; }
@@ -18,6 +24,7 @@ public class Product {
 	/**
 	 * Description to show
 	 */
+	@Column
 	private String name;
 	public String getName() { return this.name; } 
 	public void setName(String name) { this.name = name; }
@@ -25,25 +32,27 @@ public class Product {
 	/**
 	 * Unit it is measured in, default to nothing.  Showed together with {@link #measureAmount}.  For instance '500' and 'gram'
 	 */
-	private MeasureUnit measureUnit;
-	public MeasureUnit getMeasureUnit() { return this.measureUnit; }
-	public void setMeasureUnit(MeasureUnit measureUnit) { this.measureUnit = measureUnit; }
+//	private MeasureUnit measureUnit;
+//	public MeasureUnit getMeasureUnit() { return this.measureUnit; }
+//	public void setMeasureUnit(MeasureUnit measureUnit) { this.measureUnit = measureUnit; }
 	
 	/**
 	 * The measured amount of a single unit.  Should be able to handle no measurement.
 	 */
+	@Column
 	private double measureAmount;
 	public double getMeasureAmount() { return this.measureAmount; }
 	public void setMeasureAmount(double measureAmount) { this.measureAmount = measureAmount; }
 	
+	@Column
 	private String category;
 	public String getCategory() { return this.category; } 
 	public void setCategory(String category) { this.category = category; }
 	
 	// One-to-one mapping
-	private StockSetting stockSetting;
-	public StockSetting getStockSetting() { return this.stockSetting; }
-	public void setStockSetting(StockSetting stockSetting) { this.stockSetting = stockSetting; }
+//	private StockSetting stockSetting;
+//	public StockSetting getStockSetting() { return this.stockSetting; }
+//	public void setStockSetting(StockSetting stockSetting) { this.stockSetting = stockSetting; }
 	
 	/* 
 	 * TODO
