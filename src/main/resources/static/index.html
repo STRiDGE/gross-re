@@ -11,6 +11,44 @@
 	
 	<div class="alert alert-info" role="alert" ng-hide="products && products.length > 0">There are no products yet.</div>
 	
+	<form class="form-horizontal" role="form" ng-submit="addProduct(newName, newCategory, newMeasureAmount)">
+		<div class="form-group" ng-repeat="product in products">
+			<div class="checkbox col-xs-9">
+				<label>
+					{{product.name}}
+				</label>
+			</div>
+			<div class="col-xs-3">
+				<button class="pull-right btn btn-danger" type="button" title="Delete" ng-click="deleteItem(item)">
+					<span class="glyphicon glyphicon-trash"></span>
+				</button>
+			</div>
+		</div>
+		<hr />
+		<div class="input-group">
+			<div class="checkbox col-xs-5">
+				<label>Category</label>
+				<input type="text" class="form-control" ng-model="newCategory" placeholder="Dairy, Meat, Grain..." />
+			</div>
+			<div class="checkbox col-xs-5">
+				<label>Name</label>
+				<input type="text" class="form-control" ng-model="newName" placeholder="Farmer's Pride Butter" />
+			</div>
+			<div class="checkbox col-xs-5">
+				<label>Measure Amount</label>
+				<input type="number" class="form-control" ng-model="newMeasureAmount" placeholder="100" />
+			</div>
+			
+			<button class="btn btn-default" type="submit" ng-disabled="!newName" title="Add">
+				<span class="glyphicon glyphicon-plus"></span>
+			</button>
+
+		</div>
+	
+	
+	</form>
+	
+	
 </div>
 
 <!-- <body ng-app="myApp"> -->

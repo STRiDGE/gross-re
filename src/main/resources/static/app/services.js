@@ -2,10 +2,12 @@
 	var ProductFactory = function($resource) {
 		return $resource('/products/:id', {
 			id: '@id'
-		}, {
-			update: { method: "PUT" }
-			, remove: { method: "DELETE" }
-		})
+		}
+//		, {
+//			update: { method: "PUT" }
+//			, remove: { method: "DELETE" }
+//		}
+		)
 	};
 	
 	ProductFactory.$inject = ['$resource'];
