@@ -30,6 +30,9 @@
 //}(angular));
 (function(angular) {
 	var ProductController = function($scope, Product) {
+		
+		$scope.message = "Product controller";
+		
 		Product.query(function(response) {
 			$scope.products = response ? response : [];
 		});
@@ -51,7 +54,7 @@
 		};
 
 		$scope.deleteProduct = function(product) {
-			item.$remove(function() {
+			product.$remove(function() {
 				$scope.products.splice($scope.products.indexOf(product), 1);
 			});
 		};
@@ -60,4 +63,13 @@
 
 	ProductController.$inject = ['$scope', 'Product'];
 	angular.module("grossApp.controllers").controller("ProductController", ProductController);
+	
+	
+	
+	var MainController = function($scope) {
+		$scope.message = "Main controller message";
+	}
+	angular.module("grossApp.controllers").controller("MainController", MainController);
+	
+	
 }(angular));
