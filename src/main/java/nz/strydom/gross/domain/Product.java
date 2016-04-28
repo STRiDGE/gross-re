@@ -39,15 +39,15 @@ public class Product {
 	/**
 	 * The measured amount of a single unit.  Should be able to handle no measurement.
 	 */
-	@Column
-	private double measureAmount;
-	public double getMeasureAmount() { return this.measureAmount; }
-	public void setMeasureAmount(double measureAmount) { this.measureAmount = measureAmount; }
+//	@Column
+//	private double measureAmount;
+//	public double getMeasureAmount() { return this.measureAmount; }
+//	public void setMeasureAmount(double measureAmount) { this.measureAmount = measureAmount; }
 	
-	@Column
-	private String category;
-	public String getCategory() { return this.category; } 
-	public void setCategory(String category) { this.category = category; }
+//	@Column
+//	private String category;
+//	public String getCategory() { return this.category; } 
+//	public void setCategory(String category) { this.category = category; }
 	
 	// One-to-one mapping
 //	private StockSetting stockSetting;

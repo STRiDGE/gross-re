@@ -1,5 +1,6 @@
-package nz.strydom.gross.domain;
+package nz.strydom.gross.recipe.domain;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Map;
  */
 public class Recipe {
 
-	private Map<Product, Double> ingredients;
+	private List<RecipeIngredient> ingredients;
 	
 	private String description;
 	
