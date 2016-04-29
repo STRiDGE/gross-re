@@ -1,5 +1,9 @@
 package nz.strydom;
 
+import static org.junit.Assert.fail;
+
+import java.math.BigDecimal;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -13,6 +17,7 @@ public class GrossApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		fail("Not implemented");
 	}
 
 }
