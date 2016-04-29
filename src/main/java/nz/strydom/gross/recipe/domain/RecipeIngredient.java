@@ -1,5 +1,8 @@
 package nz.strydom.gross.recipe.domain;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.util.Assert;
 
@@ -59,6 +62,12 @@ public class RecipeIngredient {
 					if (number2 != 0) {
 						ingredient.amount = (double)number1 / number2;
 					}
+				}
+			} else if (firstToken.matches("^\\d*[a-zA-Z]*$")) {
+				// Some numbers and some characters
+				Matcher matcher = Pattern.compile("^(\\d*)([a-zA-Z]*)$").matcher(firstToken);
+				if (matcher.find()) {
+					ingredient.amount = NumberUtils.createDouble(matcher.group(1));
 				}
 			}
 		}
