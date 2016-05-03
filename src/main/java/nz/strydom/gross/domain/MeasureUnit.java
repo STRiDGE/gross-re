@@ -6,10 +6,10 @@ public enum MeasureUnit {
 	NONE("", "", "", UnitType.OTHER, 0)
 	, KILOGRAM("Kilogram", "kg", "kg", UnitType.WEIGHT, 1000)
 	, GRAM("Gram", "g", "g", UnitType.WEIGHT, 1, "gram", "grams")
-	, LITRE("Litre", "l", "l", UnitType.VOLUME, 1000)
+	, LITRE("Litre", "l", "l", UnitType.VOLUME, 1000, "litre", "litres")
 	, COUNT("Count", "", "", UnitType.COUNT, 1)
-	, CUP("Cups", " cup", " cups", UnitType.VOLUME, 250)
-	, TEASPOON("Teaspoon", " teaspoon", " teaspoons", UnitType.VOLUME, 5, "tspn")
+	, CUP("Cups", " cup", " cups", UnitType.VOLUME, 250, "cp")
+	, TEASPOON("Teaspoon", " teaspoon", " teaspoons", UnitType.VOLUME, 5, "tspn", "ts")
 	, TABLESPOON("Tablespoon", " tablespoon", " tablespoons", UnitType.VOLUME, 15, "tblsp")
 	;
 	
