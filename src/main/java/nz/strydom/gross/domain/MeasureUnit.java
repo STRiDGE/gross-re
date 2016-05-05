@@ -2,23 +2,31 @@ package nz.strydom.gross.domain;
 
 import java.util.*;
 
-public enum MeasureUnit {
-	NONE("", "", "", UnitType.OTHER, 0)
-	, KILOGRAM("Kilogram", "kg", "kg", UnitType.WEIGHT, 1000)
-	, GRAM("Gram", "g", "g", UnitType.WEIGHT, 1, "gram", "grams")
-	, LITRE("Litre", "l", "l", UnitType.VOLUME, 1000, "litre", "litres")
-	, COUNT("Count", "", "", UnitType.COUNT, 1)
-	, CUP("Cups", " cup", " cups", UnitType.VOLUME, 250, "cp")
-	, TEASPOON("Teaspoon", " teaspoon", " teaspoons", UnitType.VOLUME, 5, "tspn", "ts")
-	, TABLESPOON("Tablespoon", " tablespoon", " tablespoons", UnitType.VOLUME, 15, "tblsp")
-	;
+import javax.persistence.*;
+
+@Entity
+@Table(name="measure_unit")
+public class MeasureUnit {
+//	NONE("", "", "", UnitType.OTHER, 0)
+//	, KILOGRAM("Kilogram", "kg", "kg", UnitType.WEIGHT, 1000)
+//	, GRAM("Gram", "g", "g", UnitType.WEIGHT, 1, "gram", "grams")
+//	, LITRE("Litre", "l", "l", UnitType.VOLUME, 1000, "litre", "litres")
+//	, COUNT("Count", "", "", UnitType.COUNT, 1)
+//	, CUP("Cups", " cup", " cups", UnitType.VOLUME, 250, "cp")
+//	, TEASPOON("Teaspoon", " teaspoon", " teaspoons", UnitType.VOLUME, 5, "tspn", "ts")
+//	, TABLESPOON("Tablespoon", " tablespoon", " tablespoons", UnitType.VOLUME, 15, "tblsp")
+//	;
 	
-	private String description;
-	public String getDescription() { return this.description; }
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private String id;
+	public String getId() { return this.id; }
 	
 	private String display;
 	public String getDisplay() { return this.display; }
 	
+	@OneToMany()
 	private UnitType unitType;
 	public UnitType getUnitType() { return this.unitType; }
 	
@@ -28,22 +36,22 @@ public enum MeasureUnit {
 	private String displayPlural;
 	public String getDisplayPlural() { return this.displayPlural; }
 	
-	private Set<String> matches = new HashSet<>();
-	public Set<String> getMatches() { return this.matches; }
+//	private Set<String> matches = new HashSet<>();
+//	public Set<String> getMatches() { return this.matches; }
 
-	private MeasureUnit(String description, String display, String displayPlural, UnitType unitType, double amountOfBase, String... matches) {
-		this.description = description;
-		this.display = display;
-		this.displayPlural = displayPlural;
-		this.unitType = unitType;
-		this.amountOfBase = amountOfBase;
-		this.matches.addAll(Arrays.asList(matches));
-		this.matches.add(display.trim());
-		this.matches.add(displayPlural.trim());
-	}
+//	private MeasureUnit(String description, String display, String displayPlural, UnitType unitType, double amountOfBase, String... matches) {
+//		this.name = description;
+//		this.display = display;
+//		this.displayPlural = displayPlural;
+//		this.unitType = unitType;
+//		this.amountOfBase = amountOfBase;
+//		this.matches.addAll(Arrays.asList(matches));
+//		this.matches.add(display.trim());
+//		this.matches.add(displayPlural.trim());
+//	}
 	
 	public boolean canConvertToOtherUnit(MeasureUnit otherUnit) {
-		if (otherUnit == null || otherUnit.getUnitType() == UnitType.OTHER) {
+		if (otherUnit == null || otherUnit.getUnitType().getId().equalsIgnoreCase("Other")) {
 			return false;
 		}
 		
@@ -55,14 +63,16 @@ public enum MeasureUnit {
 		
 		ArrayList<MeasureUnit> potential = new ArrayList<>();
 		
-		for (MeasureUnit unit : MeasureUnit.values()) {
-			for (String item : unit.getMatches()) {
-				if (item.equalsIgnoreCase(input)) {
-					potential.add(unit);
-					break;
-				}
-			}
-		}
+		
+		// TODO connect to DAO
+//		for (MeasureUnit unit : MeasureUnit.values()) {
+//			for (String item : unit.getMatches()) {
+//				if (item.equalsIgnoreCase(input)) {
+//					potential.add(unit);
+//					break;
+//				}
+//			}
+//		}
 		
 		if (potential.size() <= 0) {
 			return null;

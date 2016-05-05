@@ -34,7 +34,7 @@ public class RecipeServiceTest {
 		
 		RecipeIngredient item1 = new RecipeIngredient();
 		item1.setAmount(450);
-		item1.setUnit(MeasureUnit.GRAM);
+		//item1.setUnit(MeasureUnit.GRAM);
 		item1.setProductText("bread crumbs");
 		
 	}
