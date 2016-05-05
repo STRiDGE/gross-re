@@ -2,17 +2,12 @@ package nz.strydom.gross;
 
 import static org.junit.Assert.fail;
 
-import java.math.BigDecimal;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.web.WebAppConfiguration;
-
-import nz.strydom.gross.GrossApplication;
-
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)

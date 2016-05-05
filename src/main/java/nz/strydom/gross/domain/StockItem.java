@@ -5,9 +5,9 @@ package nz.strydom.gross.domain;
  */
 public class StockItem {
 
-	private Product item;
-	
-	private double expectedStock;
-	
-	private double actualStock;
+//	private Product item;
+//	
+//	private double expectedStock;
+//	
+//	private double actualStock;
 }

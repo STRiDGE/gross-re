@@ -7,4 +7,6 @@ import nz.strydom.gross.recipe.domain.RecipeIngredient;
 public interface IRecipeService {
 
 	List<RecipeIngredient> scrapeIngredients(String text);
+
+	RecipeIngredient parseRecipeIngredient(String text);
 }

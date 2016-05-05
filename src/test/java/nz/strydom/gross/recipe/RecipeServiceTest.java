@@ -1,14 +1,12 @@
 package nz.strydom.gross.recipe;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import nz.strydom.gross.domain.MeasureUnit;
 import nz.strydom.gross.recipe.domain.RecipeIngredient;
 
 
@@ -36,7 +34,6 @@ public class RecipeServiceTest {
 		item1.setAmount(450);
 		//item1.setUnit(MeasureUnit.GRAM);
 		item1.setProductText("bread crumbs");
-		
 	}
 
 }

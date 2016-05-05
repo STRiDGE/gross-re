@@ -1,8 +1,18 @@
 package nz.strydom.gross.domain;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name="measure_unit")
@@ -26,15 +36,32 @@ public class MeasureUnit {
 	private String display;
 	public String getDisplay() { return this.display; }
 	
-	@OneToMany()
-	private UnitType unitType;
-	public UnitType getUnitType() { return this.unitType; }
+	@ManyToOne
+	@JoinColumn(name="unit_type_id")
+	private MeasureUnitType unitType;
+	public MeasureUnitType getUnitType() { return this.unitType; }
 	
 	private double amountOfBase;
 	public double getAmountOfBase() { return this.amountOfBase; }
 	
 	private String displayPlural;
 	public String getDisplayPlural() { return this.displayPlural; }
+	
+	@ElementCollection
+	@CollectionTable(name="measure_unit_match", joinColumns=@JoinColumn(name="measure_unit_id"))
+	@Column(name="name")
+	private List<String> matches = new ArrayList<>();
+	public List<String> getMatches() { return this.matches; }
+	public void setMatches(List<String> matches) { this.matches = matches; }
+	
+	public List<String> getAllMatches() {
+		List<String> result = new ArrayList<>(this.getMatches());
+		result.add(this.getDisplay().trim());
+		result.add(this.getDisplayPlural().trim());
+		
+		return result;
+	}
+
 	
 //	private Set<String> matches = new HashSet<>();
 //	public Set<String> getMatches() { return this.matches; }
@@ -58,29 +85,33 @@ public class MeasureUnit {
 		return this.getUnitType() == otherUnit.getUnitType();
 	}
 	
-	public static MeasureUnit parse(String string) {
-		String input = string.trim();
-		
-		ArrayList<MeasureUnit> potential = new ArrayList<>();
-		
-		
-		// TODO connect to DAO
-//		for (MeasureUnit unit : MeasureUnit.values()) {
-//			for (String item : unit.getMatches()) {
-//				if (item.equalsIgnoreCase(input)) {
-//					potential.add(unit);
-//					break;
-//				}
-//			}
+//	/**
+//	 * @deprecated Use recipe service
+//	 */
+//	@Deprecated
+//	public static MeasureUnit parse(String string) {
+//		String input = string.trim();
+//		
+//		ArrayList<MeasureUnit> potential = new ArrayList<>();
+//		
+//		
+//		// TODO connect to DAO
+////		for (MeasureUnit unit : MeasureUnit.values()) {
+////			for (String item : unit.getMatches()) {
+////				if (item.equalsIgnoreCase(input)) {
+////					potential.add(unit);
+////					break;
+////				}
+////			}
+////		}
+//		
+//		if (potential.size() <= 0) {
+//			return null;
+//		} else if (potential.size() > 1) {
+//			throw new RuntimeException("Multiple measurements matched. [" + potential.toString() + "]");
+//		} else {
+//			return potential.get(0);
 //		}
-		
-		if (potential.size() <= 0) {
-			return null;
-		} else if (potential.size() > 1) {
-			throw new RuntimeException("Multiple measurements matched. [" + potential.toString() + "]");
-		} else {
-			return potential.get(0);
-		}
-	}
+//	}
 	
 }
