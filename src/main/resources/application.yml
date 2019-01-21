@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: GrossRE
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+app:
+  description:
+    Gross RE
+  isDebug: false

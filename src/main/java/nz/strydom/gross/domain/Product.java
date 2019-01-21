@@ -1,7 +1,8 @@
 package nz.strydom.gross.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -17,16 +18,20 @@ import javax.persistence.Id;
 public class Product {
 
 	@Id
-	private String id;
-	public String getId() { return this.id; }
-	public void setId(String id) { this.id = id; }
-	
-	/**
-	 * Description to show
-	 */
-	@Column
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	private Long id;
 	private String name;
-	public String getName() { return this.name; } 
+
+	/**
+	 * The measured amount of a single unit.  Should be able to handle no measurement.
+	 */
+	private double measureAmount;
+	private String category;
+
+	public Long getId() { return this.id; }
+	public void setId(Long id) { this.id = id; }
+
+	public String getName() { return this.name; }
 	public void setName(String name) { this.name = name; }
 
 	/**
@@ -35,18 +40,11 @@ public class Product {
 //	private MeasureUnit measureUnit;
 //	public MeasureUnit getMeasureUnit() { return this.measureUnit; }
 //	public void setMeasureUnit(MeasureUnit measureUnit) { this.measureUnit = measureUnit; }
-	
-	/**
-	 * The measured amount of a single unit.  Should be able to handle no measurement.
-	 */
-	@Column
-	private double measureAmount;
+
 	public double getMeasureAmount() { return this.measureAmount; }
 	public void setMeasureAmount(double measureAmount) { this.measureAmount = measureAmount; }
-	
-	@Column
-	private String category;
-	public String getCategory() { return this.category; } 
+
+	public String getCategory() { return this.category; }
 	public void setCategory(String category) { this.category = category; }
 	
 	// One-to-one mapping
