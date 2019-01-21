@@ -34,6 +34,6 @@ public class ItemController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public void deleteItem(@PathVariable Integer id) {
-		this.repo.delete(id);
+		this.repo.deleteById(id);
 	}
 }
