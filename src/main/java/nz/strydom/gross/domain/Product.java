@@ -4,6 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * A single item to display on the shopping list.
@@ -15,38 +21,32 @@ import javax.persistence.Id;
  * Price, Quantity
  */
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Product {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long id;
-	private String name;
+	private @NotBlank String name;
 
 	/**
 	 * The measured amount of a single unit.  Should be able to handle no measurement.
 	 */
-	private double measureAmount;
+//	private double measureAmount;
+
+	private @NotNull MeasureUnit measureUnit;
 	private String category;
 
-	public Long getId() { return this.id; }
-	public void setId(Long id) { this.id = id; }
 
-	public String getName() { return this.name; }
-	public void setName(String name) { this.name = name; }
 
-	/**
-	 * Unit it is measured in, default to nothing.  Showed together with {@link #measureAmount}.  For instance '500' and 'gram'
-	 */
-//	private MeasureUnit measureUnit;
-//	public MeasureUnit getMeasureUnit() { return this.measureUnit; }
-//	public void setMeasureUnit(MeasureUnit measureUnit) { this.measureUnit = measureUnit; }
+	public Product(@NotBlank final String name, final MeasureUnit measureUnit, final String category) {
+		this.name = name;
+		this.measureUnit = measureUnit;
+		this.category = category;
+	}
 
-	public double getMeasureAmount() { return this.measureAmount; }
-	public void setMeasureAmount(double measureAmount) { this.measureAmount = measureAmount; }
-
-	public String getCategory() { return this.category; }
-	public void setCategory(String category) { this.category = category; }
-	
 	// One-to-one mapping
 //	private StockSetting stockSetting;
 //	public StockSetting getStockSetting() { return this.stockSetting; }
@@ -61,8 +61,8 @@ public class Product {
 	 * 	can do some of that with measureAmounts.  Sometimes it's more esoteric, for instance either a chocolate or a bag
 	 * 	of sweets.  When auto-creating the shopping list it should give you a choice, or random.
 	 * Should be able to compare different prices from different shops.  Add shop as tag when logging a shop experience
-	 *   
-	 * 
 	 */
+
+	// TODO Flavour, like ice cream ??
 	
 }

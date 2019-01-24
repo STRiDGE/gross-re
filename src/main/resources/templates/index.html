@@ -1,103 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="grossApp">
-<head>
-
-<link rel="stylesheet" href="./bower_components/bootstrap-css-only/css/bootstrap.css" />
-<link rel="stylesheet" href="./bower_components/font-awesome/css/font-awesome.css" />
-
-<script src="./bower_components/angular/angular.js"></script>
-<script src="./bower_components/angular-route/angular-route.js"></script>
-<script type="text/javascript" src="./bower_components/angular-resource/angular-resource.js"></script>
-<!-- 	<script type="text/javascript" src="./bower_components/lodash/dist/lodash.min.js"></script> -->
-<script type="text/javascript" src="./app/app.js"></script>
-<script type="text/javascript" src="./app/controllers.js"></script>
-<script type="text/javascript" src="./app/services.js"></script>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+  <meta charset="UTF-8"/>
+  <title>ReactJS + Spring Data REST</title>
+  <link rel="stylesheet" href="/css/main.css" />
+  <script
+      th:with="host=${#request.getServerName()},port=${@environment.getProperty('spring.devtools.livereload.port')}"
+      th:src="@{js/livereload.js(host=${host},port=${port == null}? 35729 : ${port},v=2.2.2)}"
+      th:if="${@environment.getProperty('app.isDebug')}"></script>
 </head>
+<body>
 
-<body ng-controller="MainController">
-	<header>
-		<nav class="navbar navbar-default">
-			<div class="container">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="/#/">GrossRE</a>
-				</div>
-				
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#home"><i class="fa fa-home"></i> Home</a> </li>
-					<li><a href="#product"><i class="fa fa-barcode"></i> Products</a> </li>
-				</ul>
-			</div>
-		</nav>
-	</header>
-	
-	<div id="main">
-		<div ng-view></div>	
-	</div>
+<div id="react"></div>
+
+<script src="built/bundle.js"></script>
+
 </body>
-
-<!-- 
-<body ng-app="grossApp">
-
-	<div class="container" ng-controller="ProductController">
-
-		<div class="page-header">
-			<h1>GrossRE Product</h1>
-		</div>
-
-		<div class="alert alert-info" role="alert" ng-hide="products && products.length > 0">There are no products yet.</div>
-
-		<table class="table" ng-hide="!products || products.length <= 0">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Category</th>
-					<th>Measure</th>
-					<th>&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="product in products">
-					<td>{{product.name}}</td>
-					<td>{{product.category}}</td>
-					<td>{{product.measureAmount}}</td>
-					<td>
-						<button class="pull-right btn btn-danger" type="button" title="Delete" ng-click="deleteProduct(product)">
-							<span class="glyphicon glyphicon-trash"></span>
-						</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<hr />
-		<form class="form-horizontal" role="form" ng-submit="addProduct(newName, newCategory, newMeasureAmount)">
-			<div class="form-group">
-				<label for="newProduct" class="col-sm-2 control-label">Product name</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" ng-model="newName" id="newProduct" placeholder="Farmer's Pride Butter" />
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="newCategory" class="col-sm-2 control-label">Category</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" ng-model="newCategory" id="newCategory" placeholder="Dairy, Meat, Grain..." />
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="newMeasureAmount" class="col-sm-2 control-label">Measure Amount</label>
-				<div class="col-sm-4">
-					<input type="number" class="form-control" ng-model="newMeasureAmount" id="newMeasureAmount" placeholder="100" />
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-4">
-					<button type="submit" class="btn btn-default" ng-disabled="!newName">Add Product</button>
-				</div>
-			</div>
-
-		</form>
-	</div>
-</body>
--->
 </html>

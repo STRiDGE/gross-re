@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="header">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<link rel="icon" href="/favicon.ico"/>
+		<link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+		<link th:href="@{/css/font-awesome.css}" rel="stylesheet" />
+		<link th:href="@{/css/gijgo.min.css}" rel="stylesheet" />
+		<link th:href="@{/css/autocomplete.css}" rel="stylesheet" />
+
+		<title th:text="${(title != null ? title + ' - ' : '')  + @environment.getProperty('app.description')}"></title>
+	</head>
+</th:block>
+
+<th:block th:fragment="navigation">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="/">GrossRE</a>
+
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a href="/"><i class="fa fa-home"></i> Home</a>
+				</li>
+				<li class="nav-item">
+					<a href="/product"><i class="fa fa-barcode"></i> Products</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="/h2-console" target="h2console"><i class="fas fa-database"></i> DB</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+
+
+	<!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
+		<!--<a class="navbar-brand" href="#">LegIC</a>-->
+
+		<!--<div class="collapse navbar-collapse" id="navbarSupportedContent">-->
+			<!--<ul class="navbar-nav mr-auto">-->
+				<!--<li class="nav-item">-->
+					<!--<a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>-->
+				<!--</li>-->
+
+				<!--<li class="nav-item">-->
+					<!--<a class="nav-link" href="/visit/list"><i class="fas fa-map-marked-alt"></i> Site Visit</a>-->
+				<!--</li>-->
+				<!--&lt;!&ndash;<li class="nav-item">&ndash;&gt;-->
+					<!--&lt;!&ndash;<a class="nav-link" href="#">Link</a>&ndash;&gt;-->
+				<!--&lt;!&ndash;</li>&ndash;&gt;-->
+				<!--<li class="nav-item dropdown">-->
+					<!--<a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+						<!--<i class="fas fa-tools"></i> Admin-->
+					<!--</a>-->
+					<!--<div class="dropdown-menu">-->
+						<!--<a class="dropdown-item" href="/patient/list"><i class="fas fa-user"></i> Patients</a>-->
+						<!--<a class="dropdown-item" href="/site/list"><i class="fas fa-globe-africa"></i> Sites</a>-->
+						<!--<a class="dropdown-item" href="/condition/list"><i class="fas fa-briefcase-medical"></i> Conditions</a>-->
+						<!--<a class="dropdown-item" href="/user/list"><i class="fas fa-user-shield"></i> Users</a>-->
+						<!--<div class="dropdown-divider"></div>-->
+						<!--<a class="dropdown-item" href="#">...Watch this space...</a>-->
+					<!--</div>-->
+				<!--</li>-->
+				<!--<li class="nav-item">-->
+					<!--<a class="nav-link" href="/h2-console" target="h2console"><i class="fas fa-database"></i> DB</a>-->
+				<!--</li>-->
+			<!--</ul>-->
+		<!--</div>-->
+	<!--</nav>-->
+</th:block>
+
+<th:block th:fragment="footer">
+	<script th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/js/bootstrap.js}"></script>
+	<script th:src="@{/js/app.js}"></script>
+	<script th:src="@{/js/gijgo.min.js}"></script>
+	<script th:src="@{/js/autocomplete.js}"></script>
+	<script th:src="@{/js/jquery.confirm.min.js}"></script>
+</th:block>

@@ -3,6 +3,7 @@ package nz.strydom.gross.domain;
 
 public enum MeasureUnit {
 	NONE("", "")
+	, GRAM("Gram", "kg")
 	, KILOGRAM("Kilogram", "kg")
 	, LITRE("Litre", "l")
 	, COUNT("Count", "")
@@ -15,8 +16,12 @@ public enum MeasureUnit {
 	private String display;
 	public String getDisplay() { return this.display; }
 
-	private MeasureUnit(String description, String display) {
+	MeasureUnit(String description, String display) {
 		this.description = description;
 		this.display = display;
 	}
+
+	//TODO Translate between units if possible, like gram to kilogram.  Make it reversible
+	// Something like private class UnitTranslate(Unit1, Unit2, Operation, Amount)
+
 }

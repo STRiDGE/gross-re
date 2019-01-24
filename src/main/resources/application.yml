@@ -1,9 +1,13 @@
 spring:
   application:
     name: GrossRE
-  jpa:
-    hibernate:
-      ddl-auto: create
+  data:
+    rest:
+      base-path: /api
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+
 
 app:
   description:
