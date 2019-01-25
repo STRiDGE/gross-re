@@ -11,8 +11,13 @@ var root = '/api';
 class App extends React.Component {
 
 	constructor(props) {
+		console.log("App constructor");
 		super(props);
-		this.state = {products: []};
+		this.state = {products: [], attributes: [], pageSize: 5, links: {}};
+		this.updatePageSize = this.updatePageSize.bind(this);
+		this.onCreate = this.onCreate.bind(this);
+		this.onDelete = this.onDelete.bind(this);
+		this.onNavigate = this.onNavigate.bind(this);
 	}
 
 	componentDidMount() {
@@ -42,7 +47,7 @@ class App extends React.Component {
 				attributes: Object.keys(this.schema.properties),
 				pageSize: pageSize,
 				links: productCollection.entity._links
-			})
+			});
 		});
 	}
 
@@ -53,10 +58,11 @@ class App extends React.Component {
 				path: productCollection.entity._links.self.href,
 				entity: newProduct,
 				headers: {'Content-Type': 'application/json'}
-			})
+			});
 		}).then(response => {
 			return follow(client, root, [
-				{rel: 'products', params: {'size': this.state.pageSize}}]);
+				{rel: 'products', params: {'size': this.state.pageSize}}
+			]);
 		}).done(response => {
 			if (typeof response.entity._links.last !== "undefined") {
 				this.onNavigate(response.entity._links.last.href);
@@ -66,44 +72,147 @@ class App extends React.Component {
 		});
 	}
 
+	onNavigate(navUri) {
+		client({method: 'GET', path: navUri}).done(productCollection => {
+			this.setState({
+				products: productCollection.entity._embedded.products,
+				attributes: this.state.attributes,
+				pageSize: this.state.pageSize,
+				links: productCollection.entity._links
+			});
+		});
+	}
+
+	onDelete(product) {
+		client({method: 'DELETE', path: product._links.self.href}).done(response => {
+			this.loadFromServer(this.state.pageSize);
+		});
+	}
+
+	updatePageSize(pageSize) {
+		if (pageSize !== this.state.pageSize) {
+			this.loadFromServer(pageSize);
+		}
+	}
+
 	render() {
-		console.log("products", this.state.products);
 		return (
-			<ProductList products={this.state.products}/>
+			<div>
+				<CreateProduct attributes={this.state.attributes} onCreate={this.onCreate} />
+				<ProductList products={this.state.products}
+							 links={this.state.links}
+							 pageSize={this.state.pageSize}
+							 onNavigate={this.onNavigate}
+							 onDelete={this.onDelete}
+							 updatePageSize={this.updatePageSize}
+				/>
+			</div>
 		);
 	}
 }
 
 class ProductList extends React.Component {
-	render() {
-		console.log("this.props.products", this.props.products);
 
+	constructor(props) {
+		super(props);
+		this.handleNavFirst = this.handleNavFirst.bind(this);
+		this.handleNavLast = this.handleNavLast.bind(this);
+		this.handleNavNext = this.handleNavNext.bind(this);
+		this.handleNavPrev = this.handleNavPrev.bind(this);
+		this.handleInput = this.handleInput.bind(this);
+	}
+
+	handleNavFirst(e){
+		e.preventDefault();
+		this.props.onNavigate(this.props.links.first.href);
+	}
+
+	handleNavPrev(e) {
+		e.preventDefault();
+		this.props.onNavigate(this.props.links.prev.href);
+	}
+
+	handleNavNext(e) {
+		e.preventDefault();
+		this.props.onNavigate(this.props.links.next.href);
+	}
+
+	handleNavLast(e) {
+		e.preventDefault();
+		this.props.onNavigate(this.props.links.last.href);
+	}
+
+	handleInput(e) {
+		e.preventDefault();
+		const pageSize = ReactDOM.findDOMNode(this.refs.pageSize).value;
+		if (/^[0-9]+$/.test(pageSize)) {
+			this.props.updatePageSize(pageSize);
+		} else {
+			ReactDOM.findDOMNode(this.refs.pageSize).value =
+				pageSize.substring(0, pageSize.length - 1);
+		}
+	}
+
+	render() {
 		const products = this.props.products.map(product =>
 			<Product key={product._links.self.href} product={product} />
 		);
 
+		const navLinks = [];
+		if ("first" in this.props.links) {
+			navLinks.push(<button key="first" onClick={this.handleNavFirst}>&lt;&lt; First</button>);
+		}
+		if ("prev" in this.props.links) {
+			navLinks.push(<button key="prev" onClick={this.handleNavPrev}>&lt; Prev</button>);
+		}
+		if ("next" in this.props.links) {
+			navLinks.push(<button key="next" onClick={this.handleNavNext}>Next &gt;</button>);
+		}
+		if ("last" in this.props.links) {
+			navLinks.push(<button key="last" onClick={this.handleNavLast}>Last &gt;&gt;</button>);
+		}
+
 		return (
-			<table>
-				<tbody>
-					<tr>
-						<th>Name</th>
-						<th>Unit</th>
-						<th>Category</th>
-					</tr>
-					{products}
-				</tbody>
-			</table>
+			<div>
+				<input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput} />
+				<table>
+					<tbody>
+						<tr>
+							<th>Name</th>
+							<th>Unit</th>
+							<th>Category</th>
+							<th>&nbsp;</th>
+						</tr>
+						{products}
+					</tbody>
+				</table>
+				<div>
+					{navLinks}
+				</div>
+			</div>
 		);
 	}
 }
 
 class Product extends React.Component {
+	constructor(props) {
+		super(props);
+		this.handleDelete = this.handleDelete.bind(this);
+	}
+
+	handleDelete() {
+		this.props.onDelete(this.props.product);
+	}
+
 	render() {
 		return (
 			<tr>
 				<td>{this.props.product.name}</td>
 				<td>{this.props.product.measureUnit}</td>
 				<td>{this.props.product.category}</td>
+				<td>
+					<button onClick={this.handleDelete}>Delete</button>
+				</td>
 			</tr>
 		)
 	}

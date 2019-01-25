@@ -4,6 +4,9 @@ spring:
   data:
     rest:
       base-path: /api
+  devtools:
+    restart:
+      additional-exclude: js/**
 #  jpa:
 #    hibernate:
 #      ddl-auto: create
