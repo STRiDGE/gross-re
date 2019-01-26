@@ -23,5 +23,5 @@ public enum MeasureUnit {
 
 	//TODO Translate between units if possible, like gram to kilogram.  Make it reversible
 	// Something like private class UnitTranslate(Unit1, Unit2, Operation, Amount)
-
+	// Or alternatively only list the base unit here (gram) and allow sub-types (kg) for the actual item
 }

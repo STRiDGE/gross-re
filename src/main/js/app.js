@@ -1,6 +1,6 @@
 'use strict';
 
-import {CreateProduct, ProductList} from "./product";
+import {CreateProduct, ProductList} from "./domain/product";
 
 import 'bootstrap';
 
@@ -15,7 +15,7 @@ const root = '/api';
 class App extends React.Component {
 
 	constructor(props) {
-		console.log("App constructor");
+		// console.log("App constructor");
 		super(props);
 		this.state = {products: [], attributes: [], pageSize: 10, links: {}, page: { totalPages: 1, number: 0 } };
 		this.updatePageSize = this.updatePageSize.bind(this);
@@ -78,7 +78,7 @@ class App extends React.Component {
 	}
 
 	onNavigate(navUri) {
-		// console.log("navigating " + navUri);
+		console.log("navigating " + navUri);
 		client({method: 'GET', path: navUri})
 			.done(productCollection => {
 				this.setState({
