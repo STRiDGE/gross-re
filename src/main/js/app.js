@@ -50,8 +50,6 @@ class App extends React.Component {
 				products: productCollection.entity._embedded.products,
 				attributes: Object.keys(this.schema.properties),
 				pageSize: pageSize,
-				// totalPages: productCollection.entity.page.totalPages,
-				// currentPage: productCollection.entity.page.number,
 				page: productCollection.entity.page,
 				links: productCollection.entity._links
 			});
@@ -80,7 +78,7 @@ class App extends React.Component {
 	}
 
 	onNavigate(navUri) {
-		console.log("navigating " + navUri);
+		// console.log("navigating " + navUri);
 		client({method: 'GET', path: navUri})
 			.done(productCollection => {
 				this.setState({

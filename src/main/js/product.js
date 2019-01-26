@@ -46,14 +46,15 @@ export class ProductList extends React.Component {
 		if (/^[0-9]+$/.test(pageSize)) {
 			this.props.updatePageSize(pageSize);
 		} else {
-			ReactDOM.findDOMNode(this.refs.pageSize).value =
-				pageSize.substring(0, pageSize.length - 1);
+			ReactDOM.findDOMNode(this.refs.pageSize).value = pageSize.substring(0, pageSize.length - 1);
 		}
 	}
 
+
+
 	render() {
 		const products = this.props.products.map(product =>
-			<Product key={product._links.self.href} product={product}/>
+			<Product key={product._links.self.href} product={product} onDelete={this.props.onDelete}/>
 		);
 
 		// if ("first" in this.props.links) {
@@ -70,9 +71,55 @@ export class ProductList extends React.Component {
 		// }
 
 		const pageLinks = [];
-		for (let i = 0; i < this.props.page.totalPages; i++) {
-			pageLinks.push(<li className={"page-item" + (i === this.props.page.number ? " active" : "")} key={"page" + i}><a
-				className="page-link" data-page={i} onClick={this.handleNavPage}>{i + 1}</a></li>);
+		let totalPages = this.props.page.totalPages;
+		let currentPage = this.props.page.number;
+
+		if (totalPages < 10) {
+			for (let i = 0; i < totalPages; i++) {
+				pageLinks.push(<li className={"page-item" + (i === currentPage ? " active" : "")} key={"page" + i}>
+					<a className="page-link" data-page={i} onClick={this.handleNavPage}>{i + 1}</a>
+				</li>);
+			}
+		} else {
+			// if (currentPage > 4) {
+				for (let i = 0; i < 3; i++) {
+					pageLinks.push(<li className={"page-item" + (i === currentPage ? " active" : "")} key={"page" + i}>
+						<a className="page-link" data-page={i} onClick={this.handleNavPage}>{i + 1}</a>
+					</li>);
+				}
+			// }
+
+			if (currentPage > 5) {
+				pageLinks.push(<li className="page-item" key={"page_gap1"}>
+					<a className="page-link">...</a>
+				</li>);
+			}
+
+			const start = Math.max(3, currentPage - 2);
+			const stop = Math.min(totalPages - 3, currentPage + 3);
+
+			for (let i = start; i < stop; i++) {
+				pageLinks.push(<li className={"page-item" + (i === currentPage ? " active" : "")} key={"page" + i}>
+					<a className="page-link" data-page={i} onClick={this.handleNavPage}>{i + 1}</a>
+				</li>);
+			}
+
+			if (currentPage < totalPages - 6) {
+				pageLinks.push(<li className="page-item" key={"page_gap2"}>
+					<a className="page-link">...</a>
+				</li>);
+			}
+
+			// if (currentPage < totalPages - 3) {
+
+				for (let i = totalPages - 3; i < totalPages; i++) {
+					pageLinks.push(<li className={"page-item" + (i === currentPage ? " active" : "")} key={"page" + i}>
+						<a className="page-link" data-page={i} onClick={this.handleNavPage}>{i + 1}</a>
+					</li>);
+				}
+			// }
+
+
 		}
 
 		return (
