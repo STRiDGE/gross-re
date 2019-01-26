@@ -1,19 +1,23 @@
 'use strict';
 
+import {CreateProduct, ProductList} from "./product";
+
+import 'bootstrap';
+
 const React = require('react');
 const ReactDOM = require('react-dom');
-const client = require('./client');
 
+const client = require('./client');
 const follow = require('./follow');
 
-var root = '/api';
+const root = '/api';
 
 class App extends React.Component {
 
 	constructor(props) {
 		console.log("App constructor");
 		super(props);
-		this.state = {products: [], attributes: [], pageSize: 5, links: {}};
+		this.state = {products: [], attributes: [], pageSize: 10, links: {}, page: { totalPages: 1, number: 0 } };
 		this.updatePageSize = this.updatePageSize.bind(this);
 		this.onCreate = this.onCreate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
@@ -46,6 +50,9 @@ class App extends React.Component {
 				products: productCollection.entity._embedded.products,
 				attributes: Object.keys(this.schema.properties),
 				pageSize: pageSize,
+				// totalPages: productCollection.entity.page.totalPages,
+				// currentPage: productCollection.entity.page.number,
+				page: productCollection.entity.page,
 				links: productCollection.entity._links
 			});
 		});
@@ -73,14 +80,17 @@ class App extends React.Component {
 	}
 
 	onNavigate(navUri) {
-		client({method: 'GET', path: navUri}).done(productCollection => {
-			this.setState({
-				products: productCollection.entity._embedded.products,
-				attributes: this.state.attributes,
-				pageSize: this.state.pageSize,
-				links: productCollection.entity._links
+		console.log("navigating " + navUri);
+		client({method: 'GET', path: navUri})
+			.done(productCollection => {
+				this.setState({
+					products: productCollection.entity._embedded.products,
+					attributes: this.state.attributes,
+					pageSize: this.state.pageSize,
+					page: productCollection.entity.page,
+					links: productCollection.entity._links
+				});
 			});
-		});
 	}
 
 	onDelete(product) {
@@ -98,177 +108,23 @@ class App extends React.Component {
 	render() {
 		return (
 			<div>
-				<CreateProduct attributes={this.state.attributes} onCreate={this.onCreate} />
 				<ProductList products={this.state.products}
-							 links={this.state.links}
-							 pageSize={this.state.pageSize}
-							 onNavigate={this.onNavigate}
-							 onDelete={this.onDelete}
-							 updatePageSize={this.updatePageSize}
+							links={this.state.links}
+							pageSize={this.state.pageSize}
+							page={this.state.page}
+							onNavigate={this.onNavigate}
+							onDelete={this.onDelete}
+							updatePageSize={this.updatePageSize}
 				/>
+
+				<CreateProduct attributes={this.state.attributes} onCreate={this.onCreate} />
+
 			</div>
 		);
 	}
 }
 
-class ProductList extends React.Component {
 
-	constructor(props) {
-		super(props);
-		this.handleNavFirst = this.handleNavFirst.bind(this);
-		this.handleNavLast = this.handleNavLast.bind(this);
-		this.handleNavNext = this.handleNavNext.bind(this);
-		this.handleNavPrev = this.handleNavPrev.bind(this);
-		this.handleInput = this.handleInput.bind(this);
-	}
-
-	handleNavFirst(e){
-		e.preventDefault();
-		this.props.onNavigate(this.props.links.first.href);
-	}
-
-	handleNavPrev(e) {
-		e.preventDefault();
-		this.props.onNavigate(this.props.links.prev.href);
-	}
-
-	handleNavNext(e) {
-		e.preventDefault();
-		this.props.onNavigate(this.props.links.next.href);
-	}
-
-	handleNavLast(e) {
-		e.preventDefault();
-		this.props.onNavigate(this.props.links.last.href);
-	}
-
-	handleInput(e) {
-		e.preventDefault();
-		const pageSize = ReactDOM.findDOMNode(this.refs.pageSize).value;
-		if (/^[0-9]+$/.test(pageSize)) {
-			this.props.updatePageSize(pageSize);
-		} else {
-			ReactDOM.findDOMNode(this.refs.pageSize).value =
-				pageSize.substring(0, pageSize.length - 1);
-		}
-	}
-
-	render() {
-		const products = this.props.products.map(product =>
-			<Product key={product._links.self.href} product={product} />
-		);
-
-		const navLinks = [];
-		if ("first" in this.props.links) {
-			navLinks.push(<button key="first" onClick={this.handleNavFirst}>&lt;&lt; First</button>);
-		}
-		if ("prev" in this.props.links) {
-			navLinks.push(<button key="prev" onClick={this.handleNavPrev}>&lt; Prev</button>);
-		}
-		if ("next" in this.props.links) {
-			navLinks.push(<button key="next" onClick={this.handleNavNext}>Next &gt;</button>);
-		}
-		if ("last" in this.props.links) {
-			navLinks.push(<button key="last" onClick={this.handleNavLast}>Last &gt;&gt;</button>);
-		}
-
-		return (
-			<div>
-				<input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput} />
-				<table>
-					<tbody>
-						<tr>
-							<th>Name</th>
-							<th>Unit</th>
-							<th>Category</th>
-							<th>&nbsp;</th>
-						</tr>
-						{products}
-					</tbody>
-				</table>
-				<div>
-					{navLinks}
-				</div>
-			</div>
-		);
-	}
-}
-
-class Product extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleDelete = this.handleDelete.bind(this);
-	}
-
-	handleDelete() {
-		this.props.onDelete(this.props.product);
-	}
-
-	render() {
-		return (
-			<tr>
-				<td>{this.props.product.name}</td>
-				<td>{this.props.product.measureUnit}</td>
-				<td>{this.props.product.category}</td>
-				<td>
-					<button onClick={this.handleDelete}>Delete</button>
-				</td>
-			</tr>
-		)
-	}
-}
-
-class CreateProduct extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
-
-	handleSubmit(e) {
-		e.preventDefault();
-
-		const newProduct = {};
-
-		this.props.attributes.forEach(attribute => {
-			newProduct[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
-		});
-		this.props.onCreate(newProduct);
-
-		// clear out the dialog's inputs
-		this.props.attributes.forEach(attribute => {
-			ReactDOM.findDOMNode(this.refs[attribute]).value = '';
-		});
-
-		// Navigate away from the dialog to hide it.
-		window.location = "#";
-	}
-
-	render() {
-		const inputs = this.props.attributes.map(attribute =>
-			<p key={attribute}>
-				<input type="text" placeholder={attribute} ref={attribute} className="field"/>
-			</p>
-		);
-
-		return (
-			<div>
-				<a href="#createProduct">Create</a>
-
-				<div id="createProduct" className="modalDialog">
-					<div>
-						<a href="#" title="Close" className="close">X</a>
-
-						<h2>Create new product</h2>
-						<form>
-							{inputs}
-							<button onClick={this.handleSubmit}>Create</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		)
-	}
-}
 
 ReactDOM.render(
 	<App />,

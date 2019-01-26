@@ -9,7 +9,14 @@ define(function(require) {
             if (request.path.indexOf('{') === -1) {
                 return request;
             } else {
-                request.path = request.path.split('{')[0];
+                let cleanPath = request.path.split('{')[0];
+
+                if (request.path.indexOf('}') > request.path.indexOf('{')) {
+                    cleanPath += request.path.split('}')[1];
+                }
+
+                //request.path = request.path.split('{')[0];
+                request.path = cleanPath;
                 return request;
             }
         }

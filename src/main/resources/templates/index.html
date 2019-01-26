@@ -3,11 +3,17 @@
 <head lang="en">
   <meta charset="UTF-8"/>
   <title>ReactJS + Spring Data REST</title>
-  <link rel="stylesheet" href="/css/main.css" />
+  <!--<link rel="stylesheet" href="/css/main.css" />-->
   <script
       th:with="host=${#request.getServerName()},port=${@environment.getProperty('spring.devtools.livereload.port')}"
       th:src="@{js/livereload.js(host=${host},port=${port == null}? 35729 : ${port},v=2.2.2)}"
       th:if="${@environment.getProperty('app.isDebug')}"></script>
+
+  <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+  <link th:href="@{/css/font-awesome.css}" rel="stylesheet" />
+  <link th:href="@{/css/gijgo.min.css}" rel="stylesheet" />
+  <link th:href="@{/css/autocomplete.css}" rel="stylesheet" />
+
 </head>
 <body>
 
