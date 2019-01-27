@@ -185,7 +185,7 @@ export class CreateProductDialog extends React.Component {
 								<form>
 									<div className="form-group row">
 										<label htmlFor="name" className="col-sm-2 col-form-label">Name</label>
-										<div className="col-sm-3">
+										<div className="col-sm-6">
 											<input type="text" className="form-control" ref="name" id="name"/>
 										</div>
 									</div>
@@ -267,7 +267,7 @@ export class UpdateProductDialog extends React.Component {
 								<form>
 									<div className="form-group row">
 										<label htmlFor="name" className="col-sm-2 col-form-label">Name</label>
-										<div className="col-sm-3">
+										<div className="col-sm-6">
 											<input type="text" className="form-control" ref="name" id="name" defaultValue={entity.name}/>
 										</div>
 									</div>

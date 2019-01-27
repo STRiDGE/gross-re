@@ -10,6 +10,7 @@ const when = require('when');
 
 const client = require('./client');
 const follow = require('./follow');
+const stompClient = require('./component/websocket-listener')
 
 const root = '/api';
 
@@ -24,15 +25,17 @@ class App extends React.Component {
 		this.onUpdate = this.onUpdate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
 		this.onNavigate = this.onNavigate.bind(this);
+		this.refreshCurrentPage = this.refreshCurrentPage.bind(this);
+		this.refreshAndGoToLastPage = this.refreshAndGoToLastPage.bind(this);
 	}
 
 	componentDidMount() {
-		// client({method: 'GET', path: '/api/products'}).done(
-		// 	response => {
-		// 		this.setState({products: response.entity._embedded.products})
-		// 	}
-		// );
 		this.loadFromServer(this.state.pageSize);
+		stompClient.register([
+			{ route: '/topic/newProduct', callback: this.refreshAndGoToLastPage},
+			{ route: '/topic/updateProduct', callback: this.refreshCurrentPage},
+			{ route: '/topic/deleteProduct', callback: this.refreshCurrentPage},
+		]);
 	}
 
 	loadFromServer(pageSize) {
@@ -81,17 +84,18 @@ class App extends React.Component {
 				entity: newProduct,
 				headers: {'Content-Type': 'application/json'}
 			});
-		}).then(response => {
-			return follow(client, root, [
-				{rel: 'products', params: {'size': this.state.pageSize}}
-			]);
-		}).done(response => {
-			if (typeof response.entity._links.last !== "undefined") {
-				this.onNavigate(response.entity._links.last.href);
-			} else {
-				this.onNavigate(response.entity._links.self.href);
-			}
 		});
+		// 	.then(response => {
+		// 	return follow(client, root, [
+		// 		{rel: 'products', params: {'size': this.state.pageSize}}
+		// 	]);
+		// }).done(response => {
+		// 	if (typeof response.entity._links.last !== "undefined") {
+		// 		this.onNavigate(response.entity._links.last.href);
+		// 	} else {
+		// 		this.onNavigate(response.entity._links.self.href);
+		// 	}
+		// });
 	}
 
 	onUpdate(product, updatedProduct) {
@@ -104,7 +108,7 @@ class App extends React.Component {
 				'If-Match': product.headers.Etag
 			}
 		}).done(response => {
-			this.loadFromServer(this.state.pageSize);
+			// this.loadFromServer(this.state.pageSize);
 		}, response => {
 			if (response.status.code === 412) {
 				alert('DENIED: Unable to update ' + product.entity._links.self.href + '. Your copy is stale.');
@@ -125,6 +129,7 @@ class App extends React.Component {
 			path: navUri
 		}).then(productCollection => {
 			this.links = productCollection.entity._links;
+			this.page = productCollection.entity.page;
 
 			return productCollection.entity._embedded.products.map(product =>
 				client({
@@ -145,6 +150,50 @@ class App extends React.Component {
 			});
 	}
 
+	refreshAndGoToLastPage(message) {
+		follow(client, root, [{
+			rel: 'products',
+			params: {size: this.state.pageSize}
+		}]).done(response => {
+			if (response.entity._links.last !== undefined) {
+				this.onNavigate(response.entity._links.last.href);
+			} else {
+				this.onNavigate(response.entity._links.self.href);
+			}
+		});
+	}
+
+	refreshCurrentPage(message) {
+		follow(client, root, [{
+			rel: 'products',
+			params: {
+				size: this.state.pageSize,
+				page: this.state.page.number
+			}
+		}]).then(productCollection => {
+			this.links = productCollection.entity._links;
+			this.page = productCollection.entity.page;
+
+			return productCollection.entity._embedded.products.map(product => {
+				return client({
+					method: 'GET',
+					path: product._links.self.href
+
+				});
+			});
+		}).then(productPromises => {
+			return when.all(productPromises);
+		}).then(products => {
+			this.setState({
+				page: this.page,
+				products: products,
+				attributes: Object.keys(this.schema.properties),
+				pageSize: this.state.pageSize,
+				links: this.links
+			})
+		})
+	}
+
 
 	updatePageSize(pageSize) {
 		if (pageSize !== this.state.pageSize) {
@@ -154,19 +203,17 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<div>
-				<ProductList products={this.state.products}
-										 links={this.state.links}
-										 pageSize={this.state.pageSize}
-										 page={this.state.page}
-										 attributes={this.state.attributes}
-										 onNavigate={this.onNavigate}
-										 onCreate={this.onCreate}
-										 onUpdate={this.onUpdate}
-										 onDelete={this.onDelete}
-										 updatePageSize={this.updatePageSize}
-				/>
-			</div>
+			<ProductList products={this.state.products}
+									 links={this.state.links}
+									 pageSize={this.state.pageSize}
+									 page={this.state.page}
+									 attributes={this.state.attributes}
+									 onNavigate={this.onNavigate}
+									 onCreate={this.onCreate}
+									 onUpdate={this.onUpdate}
+									 onDelete={this.onDelete}
+									 updatePageSize={this.updatePageSize}
+			/>
 		);
 	}
 }
