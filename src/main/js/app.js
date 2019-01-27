@@ -19,7 +19,7 @@ class App extends React.Component {
 	constructor(props) {
 		// console.log("App constructor");
 		super(props);
-		this.state = {products: [], attributes: [], pageSize: 10, links: {}, page: { totalPages: 1, number: 0 } };
+		this.state = {products: [], attributes: [], pageSize: 5, links: {}, page: { totalPages: 1, number: 0 } };
 		this.updatePageSize = this.updatePageSize.bind(this);
 		this.onCreate = this.onCreate.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
@@ -99,6 +99,9 @@ class App extends React.Component {
 	}
 
 	onUpdate(product, updatedProduct) {
+		console.log('product', product);
+		console.log('updatedProduct', updatedProduct);
+
 		client({
 			method: 'PUT',
 			path: product.entity._links.self.href,
@@ -178,7 +181,6 @@ class App extends React.Component {
 				return client({
 					method: 'GET',
 					path: product._links.self.href
-
 				});
 			});
 		}).then(productPromises => {
