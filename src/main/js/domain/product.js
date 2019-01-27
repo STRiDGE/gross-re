@@ -5,33 +5,6 @@ import $ from 'jquery';
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-
-function getId(object) {
-	let leaf = object;
-
-	if ("entity" in leaf) {
-		leaf = leaf.entity;
-	}
-
-	if ("_links" in leaf) {
-		leaf = leaf._links;
-	}
-
-	if ("self" in leaf) {
-		leaf = leaf.self;
-	}
-
-	let url = leaf.href;
-
-	if (url.indexOf('api/') > -1) {
-		url = url.split('api/')[1];
-	}
-
-	url = url.replace(/\//g, '_');
-
-	return url;
-}
-
 export class ProductList extends React.Component {
 
 	constructor(props) {
@@ -69,7 +42,7 @@ export class ProductList extends React.Component {
 									product={product}
 									attributes={this.props.attributes}
 									onDelete={this.props.onDelete}
-									onUpdate={this.props.onUpdate}
+									// onUpdate={this.props.onUpdate}
 									handlePrepareUpdate={this.handlePrepareUpdate}
 			/>
 		);
@@ -274,84 +247,3 @@ export class EditProductDialog extends React.Component {
 		)
 	}
 }
-
-// export class UpdateProductDialog extends React.Component {
-// 	constructor(props) {
-// 		super(props);
-// 		this.handleSubmit = this.handleSubmit.bind(this);
-// 	}
-//
-// 	handleSubmit(e) {
-// 		e.preventDefault();
-//
-// 		console.log("Updating ", this.props.product);
-//
-// 		const updatedProduct = {};
-//
-// 		this.props.attributes.forEach(attribute => {
-// 			updatedProduct[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
-// 		});
-// 		this.props.onUpdate(this.props.product, updatedProduct);
-//
-// 		$('#' + this.props.dialogId).modal('hide');
-// 	}
-//
-// 	render() {
-//
-// 		const entity = this.props.product.entity;
-//
-// 		return (
-// 			<span>
-// 				<div id={this.props.dialogId} className="modal fade" tabIndex="-1" role="dialog">
-// 				{/*<div id={this.props.dialogId}>*/}
-// 					<div className="modal-dialog">
-// 						<div className="modal-content">
-// 							<div className="modal-header">
-// 								<h5 className="modal-title">Update product</h5>
-// 								<button type="button" className="close" data-dismiss="modal">
-// 									<span>&times;</span>
-// 								</button>
-// 							</div>
-// 							<div className="modal-body">
-// 								<form>
-// 									<div className="form-group row">
-// 										<label htmlFor="name" className="col-sm-2 col-form-label">Name</label>
-// 										<div className="col-sm-6">
-// 											<input type="text" className="form-control" ref="name" id="name" defaultValue={entity.name}/>
-// 										</div>
-// 									</div>
-//
-// 									<div className="form-group row">
-// 										<label htmlFor="unit" className="col-sm-2 col-form-label">Unit</label>
-// 										<div className="col-sm-3">
-// 											<select className="form-control" ref="measureUnit" id="unit" defaultValue={entity.measureUnit}>
-// 												<option></option>
-// 												<option value="GRAM">g</option>
-// 												<option value="KILOGRAM">kg</option>
-// 												<option value="LITRE">l</option>
-// 												<option value="COUNT">count</option>
-// 											</select>
-// 										</div>
-// 									</div>
-//
-// 									<div className="form-group row">
-// 										<label htmlFor="category" className="col-sm-2 col-form-label">Category</label>
-// 										<div className="col-sm-3">
-// 											<input type="text" className="form-control" ref="category" id="category" defaultValue={entity.category}/>
-// 										</div>
-// 									</div>
-//
-// 								</form>
-//
-// 							</div>
-// 							<div className="modal-footer">
-// 								<button type="button" className="btn" data-dismiss="modal">Cancel</button>
-// 								<button type="button" className="btn btn-primary" onClick={this.handleSubmit}>Update</button>
-// 							</div>
-// 						</div>
-// 					</div>
-// 				</div>
-// 			</span>
-// 		)
-// 	}
-// }
