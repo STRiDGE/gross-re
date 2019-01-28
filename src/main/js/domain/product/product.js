@@ -2,12 +2,11 @@ import 'bootstrap';
 import {ProductList} from "./productList";
 
 const React = require('react');
-// const ReactDOM = require('react-dom');
 const when = require('when');
 
 const client = require('../../client');
 const follow = require('../../follow');
-const stompClient = require('../../component/websocket-listener')
+const stompClient = require('../../component/websocket-listener');
 
 const root = '/api';
 
@@ -105,7 +104,10 @@ export class Product extends React.Component {
 	}
 
 	onDelete(product) {
-		client({method: 'DELETE', path: product.entity._links.self.href}).done(response => {
+		client({
+			method: 'DELETE',
+			path: product.entity._links.self.href
+		}).done(response => {
 			this.loadFromServer(this.state.pageSize);
 		});
 	}
@@ -190,17 +192,19 @@ export class Product extends React.Component {
 
 	render() {
 		return (
-			<ProductList products={this.state.products}
-									 links={this.state.links}
-									 pageSize={this.state.pageSize}
-									 page={this.state.page}
-									 attributes={this.state.attributes}
-									 onNavigate={this.onNavigate}
-									 onCreate={this.onCreate}
-									 onUpdate={this.onUpdate}
-									 onDelete={this.onDelete}
-									 updatePageSize={this.updatePageSize}
-			/>
+			<div>
+				<ProductList products={this.state.products}
+										 links={this.state.links}
+										 pageSize={this.state.pageSize}
+										 page={this.state.page}
+										 attributes={this.state.attributes}
+										 onNavigate={this.onNavigate}
+										 onCreate={this.onCreate}
+										 onUpdate={this.onUpdate}
+										 onDelete={this.onDelete}
+										 updatePageSize={this.updatePageSize}
+				/>
+			</div>
 		);
 	}
 }

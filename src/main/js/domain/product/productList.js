@@ -47,7 +47,7 @@ export class ProductList extends React.Component {
 		);
 
 		return (
-			<div className="container">
+			<div>
 				{/*<label htmlFor="pageSize">Page size</label>*/}
 				<input id="pageSize" type="hidden" ref="pageSize" defaultValue={this.props.pageSize}
 							 onInput={this.handleInput}/>

@@ -2,8 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
   <meta charset="UTF-8"/>
-  <title>ReactJS + Spring Data REST</title>
+  <title>Gross RE</title>
   <!--<link rel="stylesheet" href="/css/main.css" />-->
+
+  <link rel="icon" th:href="@{/favicon.ico}" />
+
   <script
       th:with="host=${#request.getServerName()},port=${@environment.getProperty('spring.devtools.livereload.port')}"
       th:src="@{js/livereload.js(host=${host},port=${port == null}? 35729 : ${port},v=2.2.2)}"
