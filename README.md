@@ -17,8 +17,9 @@ In any case, 10 years later we have a bunch of new flavours of the decade.
 
 This project will be my personal entry into the following categories:
 - Docker (including managing the cloud host)
-- Spring Boot (including some new started packs like jpa-data)
-- AngularJS
+- Spring Boot
+- Spring Data Rest - Including HATEyOAS and HAL
+- ~~AngularJS~~  React.js 
 - HTML5 (gonna take Bootstrap for a spin)
 
 For now this is purely a self-serving project.  The only reason it's on a public repo on Github is because I don't want to pay for a private one.
