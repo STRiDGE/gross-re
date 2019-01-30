@@ -1,5 +1,5 @@
 import {Paginator} from "../../component/paginator";
-import {ProductEdit} from "./productEdit";
+import {ProductEdit} from "./ProductEdit";
 
 const React = require('react');
 const ReactDOM = require('react-dom');
@@ -9,8 +9,8 @@ export class ProductList extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleInput = this.handleInput.bind(this);
-		this.handlePrepareUpdate = this.handlePrepareUpdate.bind(this);
-		this.handlePrepareCreate = this.handlePrepareCreate.bind(this);
+		this.showUpdate = this.showUpdate.bind(this);
+		this.showCreate = this.showCreate.bind(this);
 		this.editProductRef = React.createRef();
 	}
 
@@ -24,28 +24,18 @@ export class ProductList extends React.Component {
 		}
 	}
 
-	handlePrepareUpdate(product) {
+	showUpdate(product) {
 		let editDialog = this.editProductRef.current;
 		editDialog.prepareUpdate(product);
 	}
 
-	handlePrepareCreate() {
+	showCreate() {
 		let editDialog = this.editProductRef.current;
 		editDialog.prepareCreate();
 	}
 
 
 	render() {
-		const products = this.props.products.map(product =>
-			<ProductRow key={product.entity._links.self.href}
-									product={product}
-									attributes={this.props.attributes}
-									onDelete={this.props.onDelete}
-				// onUpdate={this.props.onUpdate}
-									handlePrepareUpdate={this.handlePrepareUpdate}
-			/>
-		);
-
 		return (
 			<div>
 				{/*<label htmlFor="pageSize">Page size</label>*/}
@@ -61,20 +51,25 @@ export class ProductList extends React.Component {
 					</tr>
 					</thead>
 					<tbody>
-					{products}
+					{this.props.products.map(product =>
+						<ProductRow key={product.entity._links.self.href}
+												product={product}
+												attributes={this.props.attributes}
+												onDelete={this.props.onDelete}
+												showUpdate={this.showUpdate}
+						/>
+					)}
 					</tbody>
 				</table>
 
-				<button type="button" className="btn btn-primary" onClick={this.handlePrepareCreate}>
+				<button type="button" className="btn btn-primary" onClick={this.showCreate}>
 					<i className="fa fa-plus"/> Create Product
 				</button>
 
 				<ProductEdit ref={this.editProductRef}
 										 attributes={this.props.attributes}
 										 onCreate={this.props.onCreate}
-					// dialogId={createDialog}
 										 onUpdate={this.props.onUpdate}
-										 product={null}
 				/>
 
 				<Paginator
@@ -91,7 +86,7 @@ class ProductRow extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleDelete = this.handleDelete.bind(this);
-		this.showUpdate = this.showUpdate.bind(this);
+		this.handleUpdate = this.handleUpdate.bind(this);
 	}
 
 	handleDelete() {
@@ -100,8 +95,8 @@ class ProductRow extends React.Component {
 		}
 	}
 
-	showUpdate() {
-		this.props.handlePrepareUpdate(this.props.product);
+	handleUpdate() {
+		this.props.showUpdate(this.props.product);
 	}
 
 	render() {
@@ -114,16 +109,15 @@ class ProductRow extends React.Component {
 				<td>{entity.category}</td>
 				<td>
 
-					<div className="btn-group btn-group-sm">
-						<button type="button" onClick={this.handleDelete} className="btn btn-danger">
+					{/*<div className="btn-group btn-group-sm">*/}
+						<button type="button" className="btn btn-danger btn-sm" onClick={this.handleDelete}>
 							<i className="fa fa-trash-alt" /> Delete
 						</button>
-
-						{/*<button type="button" className="btn btn-primary" onClick={() => this.showUpdate()}>*/}
-						<button type="button" className="btn btn-primary" onClick={this.showUpdate}>
+					{" "}
+						<button type="button" className="btn btn-primary btn-sm" onClick={this.handleUpdate}>
 							<i className="fa fa-edit" /> Update
 						</button>
-					</div>
+					{/*</div>*/}
 				</td>
 			</tr>
 		)

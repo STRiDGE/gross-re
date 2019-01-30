@@ -6,6 +6,12 @@ export class NavBar extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.changeSection = this.changeSection.bind(this);
+	}
+
+	changeSection(sectionName, e) {
+		e.preventDefault();
+		this.props.changeSection(sectionName);
 	}
 
 	render() {
@@ -15,7 +21,7 @@ export class NavBar extends React.Component {
 								aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 					<span className="navbar-toggler-icon"></span>
 				</button>
-				<a className="navbar-brand" href="/">
+				<a className="navbar-brand" href="/" onClick={(e) => this.changeSection("Home", e)}>
 					<img src="/img/favicon-brand.png" width="43" height="30" className="d-inline-block align-top" />
 					{" Gross RE"}
 				</a>
@@ -23,7 +29,7 @@ export class NavBar extends React.Component {
 				<div className="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul className="navbar-nav mr-auto">
 						<li className="nav-item">
-							<a className="nav-link" href="/"><i className="fa fa-compress" /> TODO</a>
+							<a className="nav-link"><i className="fa fa-compress" /> TODO</a>
 						</li>
 
 						<li className="nav-item dropdown">
@@ -31,7 +37,7 @@ export class NavBar extends React.Component {
 								<i className="fas fa-tools" /> Admin
 							</a>
 							<div className="dropdown-menu">
-								<a className="nav-link" href="/"><i className="fa fa-list" /> Product</a>
+								<a className="nav-link" onClick={(e) => this.changeSection("Product", e)}><i className="fa fa-list" /> Product</a>
 								{/*<a className="dropdown-item" href="/site/list"><i className="fas fa-globe-africa"></i> Sites</a>*/}
 								{/*<a className="dropdown-item" href="/condition/list"><i*/}
 									{/*className="fas fa-briefcase-medical"></i> Conditions</a>*/}

@@ -1,5 +1,5 @@
 import 'bootstrap';
-import {ProductList} from "./productList";
+import {ProductList} from "./ProductList";
 
 const React = require('react');
 const when = require('when');
@@ -193,6 +193,7 @@ export class Product extends React.Component {
 	render() {
 		return (
 			<div>
+				<h3>Products</h3>
 				<ProductList products={this.state.products}
 										 links={this.state.links}
 										 pageSize={this.state.pageSize}
